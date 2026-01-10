@@ -1,11 +1,11 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.AddStudentDto;
 import com.example.demo.dto.StudentDto;
-import com.example.demo.entity.Student;
-import com.example.demo.repository.StudentRepository;
 import com.example.demo.service.StudentService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,9 +18,25 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-    @GetMapping("/student")
-    public List<StudentDto> getStudent(){
-        return studentService.getAllStudent();
+    @GetMapping("/")
+    public ResponseEntity<List<StudentDto>> getStudent(){
+        return ResponseEntity.ok(studentService.getAllStudent());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<StudentDto> getStudentById(@PathVariable Long id){
+        return ResponseEntity.ok(studentService.getStudnetById(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<StudentDto> createStudent(@RequestBody AddStudentDto addStudentDto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(studentService.createStudent(addStudentDto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable Long id){
+     studentService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
 
